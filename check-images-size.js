@@ -1,6 +1,8 @@
 // ./remove-comments-plugin.js
 
-var colors = require('colors');
+const config = require('./size.config')
+
+console.log(config.name);
 
 class CheckImagesSize {
   apply(compiler) {
@@ -8,31 +10,34 @@ class CheckImagesSize {
     compiler.hooks.emit.tap('CheckImagesSize', compilation => {
       console.log('plugins');
       console.log('\n');
-      console.log('约定图片体积不得超过200KB');
+      let imgList = []
+      let jsList = []
       // compilation => 可以理解为此次打包的上下文
       for (const name in compilation.assets) {
 
-        // console.log(name); // 检查css载入
+        // 获取大小 转换成KB
+        const size = ((compilation.assets[name].size()) / 1024).toFixed(3)
         // 获取图片格式
         if (name.endsWith('.svg') || name.endsWith('.png') || name.endsWith('.jpg')) {
 
-          // 获取大小 转换成KB
-          const size = ((compilation.assets[name].size()) / 1024).toFixed(3)
 
-          // 针对不同文件输出不一样的颜色
-          if (size < 100) {
-            console.log(name, (size + 'KB').green);
-          } else if (size < 200 && size > 100) {
-            console.log(name, (size + 'KB').yellow);
-          } else {
-            console.log(name, (size + 'KB').red);
-          }
+          imgList.push({
+            name,
+            size: size + 'KB'
+          })
 
-          // 考虑是否加入排序功能
-
+        } else if(name.endsWith('.js')){
+          jsList.push({
+            name,
+            size: size + 'KB'
+          })
         }
 
       }
+      console.log('png || jpg || svg 文件大小');
+      console.table(imgList);
+      console.log('js 文件大小');
+      console.table(jsList);
 
       console.log('\n');
 
