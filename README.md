@@ -31,6 +31,26 @@ use 是从后往前执行。
 
 钩子机制
 
+### run => compiler
+
+在开始读取 records 之前调用。
+
+### entryOption => content,entry
+
+读取配置文件
+
+### make => compilation
+
+非常重要的一个过程
+
+### emit => compilation
+
+输出 asset 到 output 目录之前执行。
+
+### done => stats
+
+在 compilation 完成时执行。
+
 ## Code Splitting
 
 ## 动态导入
